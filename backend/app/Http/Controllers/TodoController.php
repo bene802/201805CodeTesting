@@ -14,14 +14,22 @@ class TodoController extends Controller
      */
     public function index()
     {
+        
         //get all todos
         $todolist = Todo::all();
+        // return view('todos.index')->with('todolist', $todolist);
+        return response()->json($todolist);
+    }
 
-        return response()->json([
-            "this uri is todos, http method is GET",
-            "page is used to show a list of todos",
-            "use this function to transfer array to json data"
-        ]);
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+        return view('todos.create');
     }
 
     /**
@@ -33,6 +41,13 @@ class TodoController extends Controller
     public function store(Request $request)
     {
         //
+        // $url = '/newapp/public/todos'; 
+        // $this->validate($request, ['task'=>'required', 'complete'=>'required']);
+        $todo = new Todo;
+        $todo->task = $request->input('task');
+        $todo->status = $request->input('status');
+        $todo->save();
+        // return header( "Location: $url" );
         return response()->json([
             "this uri is todos, http method is POST",
             "page is used to store a new todo task into database",
@@ -41,24 +56,18 @@ class TodoController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function show($id)
     {
         //
-        return response()->json([
-            "this uri is todos/{todo}, http method is DELETE",
-            'everything inside {} means it is a parameter which will be retrieved by this function via $id variable',
-            'delete one specific todo '
-        ]);
+        $todo = Todo::find($id);
+        return view('todos.show')->with('todo', $todo);
     }
 
-    /**
-     * below two tasks are optional
-     */
     /**
      * Show the form for editing the specified resource.
      *
@@ -68,11 +77,7 @@ class TodoController extends Controller
     public function edit($id)
     {
         //
-        return response()->json([
-            "this uri is todos/{todo}/edit, http method is GET",
-            'everything inside {} means it is a parameter which will be retrieved by this function via $id variable',
-            'retrieve the todo task which is intended to be edited and fit it in a form for user to edit'
-        ]);
+
     }
 
     /**
@@ -85,6 +90,13 @@ class TodoController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $todo = Todo::find($id);
+        if($todo->status == 'pending')
+            $todo->status = 'complete';
+        else
+            $todo->status = 'pending';
+        $todo.save();
+
         return response()->json([
             "this uri is todos/{todo}, http method is PUT",
             'everything inside {} means it is a parameter which will be retrieved by this function via $id variable',
@@ -92,19 +104,22 @@ class TodoController extends Controller
         ]);
     }
 
-
-    public function show($id)
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
     {
         //
-
+        $todo = Todo::find($id);
+        $todo->delete();
+        // return delete;
+        return response()->json([
+            "this uri is todos/{todo}, http method is DELETE",
+            'everything inside {} means it is a parameter which will be retrieved by this function via $id variable',
+            'delete one specific todo '
+        ]);
     }
-
-
-    public function create()
-    {
-        //
-
-    }
-
-
 }

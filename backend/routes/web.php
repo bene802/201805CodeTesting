@@ -11,8 +11,13 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'PagesController@index');
+
+// Route::get('/about', 'PagesController@about');
+
+// Route::get('/services', 'PagesController@services');
 
 Route::resource('todos', 'TodoController');
+Route::resource('todos/todos/{id}', 'TodoController@destroy');
+Route::resource('todos/todos', 'TodoController@store');
+
