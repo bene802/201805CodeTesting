@@ -14,7 +14,7 @@ class TodoController extends Controller
      */
     public function index()
     {
-        
+
         //get all todos
         $todolist = Todo::all();
         // return view('todos.index')->with('todolist', $todolist);
@@ -29,7 +29,7 @@ class TodoController extends Controller
     public function create()
     {
         //
-        return view('todos.create');
+        // return view('todos.create');
     }
 
     /**
@@ -41,7 +41,7 @@ class TodoController extends Controller
     public function store(Request $request)
     {
         //
-        // $url = '/newapp/public/todos'; 
+        // $url = '/newapp/public/todos';
         // $this->validate($request, ['task'=>'required', 'complete'=>'required']);
         $todo = new Todo;
         $todo->task = $request->input('task');
@@ -64,8 +64,8 @@ class TodoController extends Controller
     public function show($id)
     {
         //
-        $todo = Todo::find($id);
-        return view('todos.show')->with('todo', $todo);
+        // $todo = Todo::find($id);
+        // return view('todos.show')->with('todo', $todo);
     }
 
     /**
